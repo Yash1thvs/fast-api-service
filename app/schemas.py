@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from uuid import UUID
+from datetime import datetime
 
 
 class Message(BaseModel):
@@ -20,11 +22,20 @@ class UserCostDetails(BaseModel):
 
 
 class Client(BaseModel):
-    id: str
+    id: UUID
     title: str
+    created_time: datetime
+    modified_time: datetime
+
+    class Config:
+        # Use from_attributes instead of orm_mode in Pydantic v2+
+        from_attributes = True
 
 
 class ClientCostDetails(BaseModel):
-    client: Client
+    client: str
     total_cost: float
     tasks: List[TaskCostDetails]
+
+    class Config:
+        from_attributes = True
