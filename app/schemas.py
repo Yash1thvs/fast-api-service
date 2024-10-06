@@ -14,6 +14,7 @@ class TaskCostDetails(BaseModel):
     category: str
     message_count: int
     total_cost: float
+    user_email: str  # Include user_email in the response model
 
 
 class UserCostDetails(BaseModel):
@@ -28,7 +29,6 @@ class Client(BaseModel):
     modified_time: datetime
 
     class Config:
-        # Use from_attributes instead of orm_mode in Pydantic v2+
         from_attributes = True
 
 
