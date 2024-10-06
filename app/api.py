@@ -16,12 +16,9 @@ router = APIRouter()
 
 @router.get("/clients", response_model=List[ClientSchema])
 def list_clients(db: Session = Depends(get_db)):
-    # Use the SQLAlchemy model (ClientModel) to query the database
     clients = db.query(ClientModel).all()  # This is the ORM model query
     if not clients:
         raise HTTPException(status_code=404, detail="No clients found")
-
-    # Return the clients (they will be automatically converted to the Pydantic schema)
     return clients
 
 
@@ -40,7 +37,7 @@ def client_cost(client_id: str, month: int = 10, db: Session = Depends(get_db)):
                 "category": c.category,
                 "message_count": c.message_count,
                 "total_cost": c.total_cost,
-                "user_email": c.user_email  # Add user email in the response
+                "user_email": c.user_email
             }
             for c in cost_details
         ]

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 from uuid import UUID
 from datetime import datetime
 
@@ -14,7 +14,7 @@ class TaskCostDetails(BaseModel):
     category: str
     message_count: int
     total_cost: float
-    user_email: str  # Include user_email in the response model
+    user_email: str
 
 
 class UserCostDetails(BaseModel):
