@@ -24,9 +24,8 @@ def get_client_cost(db: Session, client_id: str, month: int):
     return cost_details
 
 
-
-def get_user_cost(db: Session, client_id: str, user_email: str, month: int):
-    # Get user cost details
+def get_user_cost(db: Session, client_id: str, user_id: str, month: int):
+    # Fetch costs for the specified user, client, and month
     user_costs = db.query(
         Task.title.label('task_name'),
         Task.category.label('category'),
@@ -36,7 +35,11 @@ def get_user_cost(db: Session, client_id: str, user_email: str, month: int):
         .join(Message, Chat.id == Message.chat_id) \
         .join(HandlerPricing, Task.form_handler == HandlerPricing.handler_name) \
         .join(User, Chat.user_id == User.id) \
-        .filter(User.email == user_email, func.date_part('month', Message.created_time) == month) \
+        .filter(
+            User.id == user_id,
+            func.date_part('month', Message.created_time) == month,
+            Task.client_models_id == client_id
+        ) \
         .group_by(Task.title, Task.category).all()
-
+    print(str(user_costs))
     return user_costs

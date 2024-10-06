@@ -39,9 +39,9 @@ def client_cost(client_id: str, month: int = 10, db: Session = Depends(get_db)):
     }
 
 
-@router.get("/clients/{client_id}/user/{user_email}/cost", response_model=UserCostDetails)
-def user_cost(client_id: str, user_email: str, month: int = 10, db: Session = Depends(get_db)):
-    user_cost_details = get_user_cost(db, client_id, user_email, month)
-    if not user_cost_details:
+@router.get("/clients/{client_id}/user/{user_id}/cost")
+def user_cost(client_id: str, user_id: str, month: int = 10, db: Session = Depends(get_db)):
+    cost_details = get_user_cost(db, client_id, user_id, month)
+    if not cost_details:
         raise HTTPException(status_code=404, detail="No user cost details found")
-    return {"email": user_email, "task_costs": user_cost_details}
+    return {"client": client_id, "user": user_id, "total_cost": sum([c.total_cost for c in cost_details]), "tasks": cost_details}
